@@ -15,7 +15,7 @@ import {
 import { Line, Bar, Doughnut } from 'react-chartjs-2';
 import { usePlanner } from '../context/PlannerContext';
 import { formatCurrency, formatPercent } from '../utils/formatters';
-import { LineChart, BarChart3, PieChart, Info } from 'lucide-react';
+import { LineChart, BarChart3, PieChart } from 'lucide-react';
 
 ChartJS.register(
   CategoryScale,
@@ -97,8 +97,8 @@ export function ChartsSection() {
         bodyColor: tooltipBodyColor,
         borderColor: tooltipBorder,
         borderWidth: 1,
-        padding: 12,
-        boxPadding: 6,
+        padding: 10,
+        boxPadding: 4,
         callbacks: {
           label: (context) => {
             const index = context.dataIndex;
@@ -132,7 +132,8 @@ export function ChartsSection() {
           maxRotation: 45,
           minRotation: 0,
           autoSkip: true,
-          maxTicksLimit: 12,
+          maxTicksLimit: 8,
+          font: { size: 10 },
         },
       },
       y: {
@@ -140,6 +141,7 @@ export function ChartsSection() {
         ticks: {
           color: textColor,
           callback: (value) => formatCurrency(value, currency, true),
+          font: { size: 10 },
         },
         min: 0,
       },
@@ -147,7 +149,7 @@ export function ChartsSection() {
   };
 
   // 2. Cashflow Breakdown at Retirement
-  const cashflowLabels = ['Target Spend', 'Retirement Income Sources'];
+  const cashflowLabels = ['Target Spend', 'Income Sources'];
   
   const cashflowBarData = {
     labels: cashflowLabels,
@@ -156,7 +158,7 @@ export function ChartsSection() {
         label: 'Target Monthly Spend',
         data: [cashflowBreakdown.targetSpend, 0],
         backgroundColor: darkMode ? '#f43f5e' : '#e11d48',
-        borderRadius: 8,
+        borderRadius: 6,
         stack: 'spend',
       },
       {
@@ -198,8 +200,9 @@ export function ChartsSection() {
         position: 'bottom',
         labels: {
           color: textColor,
-          boxWidth: 12,
-          padding: 16,
+          boxWidth: 10,
+          padding: 10,
+          font: { size: 11 },
         },
       },
       tooltip: {
@@ -208,7 +211,7 @@ export function ChartsSection() {
         bodyColor: tooltipBodyColor,
         borderColor: tooltipBorder,
         borderWidth: 1,
-        padding: 12,
+        padding: 10,
         callbacks: {
           label: (context) => {
             const val = formatCurrency(context.raw, currency);
@@ -220,13 +223,14 @@ export function ChartsSection() {
     scales: {
       x: {
         grid: { display: false },
-        ticks: { color: textColor },
+        ticks: { color: textColor, font: { size: 11 } },
       },
       y: {
         grid: { color: gridColor },
         ticks: {
           color: textColor,
           callback: (value) => formatCurrency(value, currency, true),
+          font: { size: 10 },
         },
         stacked: true,
       },
@@ -235,7 +239,7 @@ export function ChartsSection() {
 
   // 3. Income Source Donut Chart
   const donutData = {
-    labels: ['Public Pension (Net)', 'Private Pensions (Net)', 'Real Estate (Net)', 'Portfolio Drawdown (Net)'],
+    labels: ['Public Pension', 'Private Pensions', 'Real Estate', 'Portfolio Drawdown'],
     datasets: [
       {
         data: [
@@ -259,8 +263,9 @@ export function ChartsSection() {
         position: 'bottom',
         labels: {
           color: textColor,
-          boxWidth: 12,
-          padding: 12,
+          boxWidth: 10,
+          padding: 10,
+          font: { size: 11 },
         },
       },
       tooltip: {
@@ -269,7 +274,7 @@ export function ChartsSection() {
         bodyColor: tooltipBodyColor,
         borderColor: tooltipBorder,
         borderWidth: 1,
-        padding: 12,
+        padding: 10,
         callbacks: {
           label: (context) => {
             const val = formatCurrency(context.raw, currency);
@@ -283,60 +288,60 @@ export function ChartsSection() {
   };
 
   return (
-    <section className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-5">
+    <section className="bg-white dark:bg-slate-900 p-4 sm:p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4 sm:space-y-5 w-full">
       {/* Header & View Switcher */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
         <div>
-          <h2 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+          <h2 className="text-sm sm:text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
             Visual Projections & Trajectory
           </h2>
-          <p className="text-xs text-slate-500 dark:text-slate-400">
-            Interactive modeling of portfolio wealth accumulation, drawdown, and cashflows
+          <p className="text-[11px] sm:text-xs text-slate-500 dark:text-slate-400">
+            Interactive modeling of wealth accumulation, drawdown, and cashflows
           </p>
         </div>
 
         {/* Tab Switcher */}
-        <div className="flex items-center gap-1 bg-slate-100 dark:bg-slate-800 p-1 rounded-xl shrink-0 self-start sm:self-auto">
+        <div className="w-full sm:w-auto overflow-x-auto no-scrollbar flex items-center gap-1 bg-slate-100 dark:bg-slate-800 p-1 rounded-xl shrink-0">
           <button
             onClick={() => setActiveTab('trajectory')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg transition ${
+            className={`flex-1 sm:flex-initial flex items-center justify-center gap-1.5 px-2.5 sm:px-3 py-1.5 text-[11px] sm:text-xs font-semibold rounded-lg transition whitespace-nowrap ${
               activeTab === 'trajectory'
                 ? 'bg-white dark:bg-slate-700 text-brand-700 dark:text-brand-300 shadow-sm'
                 : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
             }`}
           >
             <LineChart className="w-3.5 h-3.5" />
-            <span>Lifetime Trajectory</span>
+            <span>Trajectory</span>
           </button>
 
           <button
             onClick={() => setActiveTab('cashflow')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg transition ${
+            className={`flex-1 sm:flex-initial flex items-center justify-center gap-1.5 px-2.5 sm:px-3 py-1.5 text-[11px] sm:text-xs font-semibold rounded-lg transition whitespace-nowrap ${
               activeTab === 'cashflow'
                 ? 'bg-white dark:bg-slate-700 text-brand-700 dark:text-brand-300 shadow-sm'
                 : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
             }`}
           >
             <BarChart3 className="w-3.5 h-3.5" />
-            <span>Cashflow Breakdown</span>
+            <span>Cashflow</span>
           </button>
 
           <button
             onClick={() => setActiveTab('sources')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg transition ${
+            className={`flex-1 sm:flex-initial flex items-center justify-center gap-1.5 px-2.5 sm:px-3 py-1.5 text-[11px] sm:text-xs font-semibold rounded-lg transition whitespace-nowrap ${
               activeTab === 'sources'
                 ? 'bg-white dark:bg-slate-700 text-brand-700 dark:text-brand-300 shadow-sm'
                 : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
             }`}
           >
             <PieChart className="w-3.5 h-3.5" />
-            <span>Income Sources</span>
+            <span>Sources</span>
           </button>
         </div>
       </div>
 
       {/* Chart Canvas Container */}
-      <div className="h-80 sm:h-96 w-full relative">
+      <div className="h-64 sm:h-80 md:h-96 w-full relative">
         {activeTab === 'trajectory' && (
           <div className="h-full w-full">
             <Line data={trajectoryChartData} options={trajectoryOptions} />
@@ -351,7 +356,7 @@ export function ChartsSection() {
 
         {activeTab === 'sources' && (
           <div className="h-full w-full flex items-center justify-center">
-            <div className="h-full w-full max-w-md">
+            <div className="h-full w-full max-w-xs sm:max-w-md">
               <Doughnut data={donutData} options={donutOptions} />
             </div>
           </div>
@@ -359,23 +364,23 @@ export function ChartsSection() {
       </div>
 
       {/* Milestone Legend & Context Notes */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-4 border-t border-slate-100 dark:border-slate-800 text-xs">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3 pt-3 sm:pt-4 border-t border-slate-100 dark:border-slate-800 text-[11px] sm:text-xs">
         <div className="flex items-center gap-2 text-slate-600 dark:text-slate-400">
           <span className="w-2.5 h-2.5 rounded-full bg-blue-500 shrink-0"></span>
           <span>
-            <strong>Retirement Age ({plan.retirementAge}):</strong> Peak wealth transition to decumulation
+            <strong>Retirement Age ({plan.retirementAge}):</strong> Transition to decumulation
           </span>
         </div>
         <div className="flex items-center gap-2 text-slate-600 dark:text-slate-400">
           <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 shrink-0"></span>
           <span>
-            <strong>End Age ({plan.endAge}):</strong> Longevity horizon target
+            <strong>Target Age ({plan.endAge}):</strong> Horizon target
           </span>
         </div>
         <div className="flex items-center gap-2 text-slate-600 dark:text-slate-400">
           <span className={`w-2.5 h-2.5 rounded-full shrink-0 ${kpis.depletionAge ? 'bg-rose-500' : 'bg-emerald-400'}`}></span>
-          <span>
-            <strong>Longevity Status:</strong> {kpis.depletionAge ? `Depletes at age ${kpis.depletionAge}` : `Funded through age ${plan.endAge}+`}
+          <span className="truncate">
+            <strong>Longevity:</strong> {kpis.depletionAge ? `Depletes at age ${kpis.depletionAge}` : `Funded through age ${plan.endAge}+`}
           </span>
         </div>
       </div>
